@@ -50,13 +50,13 @@ const App: FC = () => {
     );
   }
 
-  if (!store.isAuth) {
-    return (
-      <BrowserRouter>
-        <Routes>
-          <Route
-            path={patches.login.route}
-            element={
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route
+          path={patches.login.route}
+          element={
+            <>
               <div className="app">
                 <div className="auth-container">
                   <div className="auth-card">
@@ -64,11 +64,14 @@ const App: FC = () => {
                   </div>
                 </div>
               </div>
-            }
-          />
-          <Route
-            path={patches.signup.route}
-            element={
+            </>
+          }
+        />
+
+        <Route
+          path={patches.signup.route}
+          element={
+            <>
               <div className="app">
                 <div className="auth-container">
                   <div className="auth-card">
@@ -76,24 +79,40 @@ const App: FC = () => {
                   </div>
                 </div>
               </div>
-            }
-          />
-          <Route
-            path="*"
-            element={<Navigate to={patches.login.route} replace />}
-          />
-        </Routes>
-      </BrowserRouter>
-    );
-  }
+            </>
+          }
+        />
 
-  return (
-    <BrowserRouter>
-      <Header />
-      <Routes>
-        <Route path={patches.home.route} element={<HomePage />} />
-        <Route path={patches.profile.route} element={<ProfilePage />} />
-        <Route path={patches.book.route} element={<BookPage />} />
+        <Route
+          path={patches.home.route}
+          element={
+            <>
+              <Header />
+              <HomePage />
+            </>
+          }
+        />
+
+        <Route
+          path={patches.profile.route}
+          element={
+            <>
+              <Header />
+              <ProfilePage />
+            </>
+          }
+        />
+
+        <Route
+          path={patches.book.route}
+          element={
+            <>
+              <Header />
+              <BookPage />
+            </>
+          }
+        />
+
         <Route
           path="*"
           element={<Navigate to={patches.home.route} replace />}
