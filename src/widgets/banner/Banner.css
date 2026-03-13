@@ -1,0 +1,179 @@
+@import url("../../variables.css");
+
+.Banner {
+  background: #f2e5f7;
+  border: 2px solid #550b65;
+  border-radius: 21px;
+  box-shadow: 0 10px 30px rgba(56, 14, 65, 0.08);
+  overflow: hidden;
+  position: relative;
+  min-height: 400px;
+}
+
+.Banner__content {
+  display: flex;
+  justify-content: space-between;
+  align-items: stretch;
+  height: 100%;
+}
+
+.Banner__text {
+  flex: 1;
+  padding: 40px 0 40px 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  max-width: 600px;
+}
+
+.Banner__title {
+  font-family: "SONGER Grotesque", sans-serif;
+  font-weight: 700;
+  font-size: 100px;
+  color: #550b65;
+  line-height: 0.9;
+  margin: 0 0 20px 0;
+  text-transform: uppercase;
+}
+
+.Banner__discount {
+  font-family: "Montserrat", sans-serif;
+  font-weight: 600;
+  font-size: 60px;
+  color: #bd00aa;
+  margin: 0 0 20px 0;
+  line-height: 1.2;
+}
+
+.Banner__description {
+  font-family: "Montserrat", sans-serif;
+  font-weight: 400;
+  font-size: 23px;
+  color: #550b65;
+  margin: 0 0 30px 0;
+  line-height: 1.4;
+  max-width: 500px;
+}
+
+.Banner__button {
+  width: 335px;
+  height: 52px;
+  background: var(--color-primary);
+  color: #f2e5f7;
+  border: none;
+  border-radius: 24px;
+  font-family: "Montserrat", sans-serif;
+  font-size: 18px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 10px rgba(56, 14, 65, 0.2);
+  letter-spacing: 0.5px;
+}
+
+.Banner__button:hover {
+  background: #2a0b31;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(56, 14, 65, 0.3);
+}
+
+.Banner__button:active {
+  transform: translateY(0);
+}
+
+.Banner__image {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: stretch;
+}
+
+.Banner__image img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+@media (max-width: 1200px) {
+  .Banner__title {
+    font-size: 80px;
+  }
+
+  .Banner__discount {
+    font-size: 26px;
+  }
+
+  .Banner__description {
+    font-size: 20px;
+  }
+}
+
+@media (max-width: 992px) {
+  .Banner__content {
+    flex-direction: column;
+  }
+
+  .Banner__text {
+    padding: 40px;
+    max-width: 100%;
+  }
+
+  .Banner__image {
+    max-width: 100%;
+    justify-content: center;
+  }
+
+  .Banner__image img {
+    max-width: 80%;
+  }
+
+  .Banner__title {
+    font-size: 70px;
+  }
+}
+
+@media (max-width: 768px) {
+  .Banner {
+    margin: 10px;
+    min-height: auto;
+  }
+
+  .Banner__text {
+    padding: 30px;
+  }
+
+  .Banner__title {
+    font-size: 60px;
+  }
+
+  .Banner__discount {
+    font-size: 24px;
+  }
+
+  .Banner__description {
+    font-size: 18px;
+  }
+
+  .Banner__button {
+    width: 100%;
+    max-width: 335px;
+  }
+}
+
+@media (max-width: 480px) {
+  .Banner__title {
+    font-size: 48px;
+  }
+
+  .Banner__discount {
+    font-size: 22px;
+  }
+
+  .Banner__description {
+    font-size: 16px;
+  }
+
+  .Banner__button {
+    height: 48px;
+    font-size: 16px;
+  }
+}

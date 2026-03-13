@@ -1,0 +1,18 @@
+@import url("../../../variables.css");
+
+.HomePage {
+  min-height: 100vh;
+}
+
+.HomePage__content {
+  padding: 40px 20px;
+  max-width: 1440px;
+  margin: 0 auto;
+}
+
+.HomePage__title {
+  color: var(--color-primary);
+  font-size: 36px;
+  font-weight: 600;
+  margin-bottom: 30px;
+}
