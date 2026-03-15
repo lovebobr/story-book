@@ -3,7 +3,7 @@ import type { AuthResponse } from "../../models/response/AuthResponse";
 
 export const API_URL = `http://localhost:8080`;
 
-const $api = axios.create({
+export const $api = axios.create({
   baseURL: API_URL,
 });
 
@@ -49,5 +49,3 @@ $api.interceptors.response.use(
     throw error;
   },
 );
-
-export default $api;
