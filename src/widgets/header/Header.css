@@ -1,15 +1,22 @@
 @import url("../../variables.css");
 
+.Header__Full {
+  background-color: var(--color-background);
+  position: sticky;
+  top: 0px;
+  padding-top: 20px;
+  padding: 0 80px;
+  z-index: 1000;
+}
+
 .Header {
   background: var(--color-primary);
   box-shadow: 0 4px 12px #550b654f;
+  font-family: "MyCustomFont";
   border-radius: 21px;
   padding: 12px 0;
   margin-bottom: 50px;
   box-shadow: 0 10px 30px rgba(56, 14, 65, 0.08);
-  position: sticky;
-  top: 20px;
-  z-index: 1000;
 }
 
 .Header__container {
@@ -18,15 +25,15 @@
   justify-content: space-between;
   margin: 0 auto;
   padding: 0 40px;
+
   gap: 32px;
 }
 
 .Header__logo {
   color: var(--color-background);
   font-size: 51px;
-  font-family: "SONGER Grotesque", sans-serif;
   font-weight: 600;
-  letter-spacing: -7.5px;
+  letter-spacing: 0;
   cursor: pointer;
   line-height: 1.1;
   max-width: 200px;
@@ -125,9 +132,10 @@
 
 .Header__tab-label {
   font-size: 20px;
-  font-weight: 500;
+  font-weight: 400;
   text-align: center;
   white-space: nowrap;
+  font-family: "Montserrat", sans-serif;
   color: var(--color-background);
 }
 

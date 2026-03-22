@@ -6,7 +6,7 @@ import "./Header.css";
 import acc from "../../assets/icons/acc.svg";
 import cart from "../../assets/icons/cart.svg";
 import favorites from "../../assets/icons/favorites.svg";
-import order from "../../assets/icons/acc.svg";
+import order from "../../assets/icons/order.svg";
 import search from "../../assets/icons/search.svg";
 
 interface HeaderProps {
@@ -52,46 +52,48 @@ const Header: React.FC<HeaderProps> = ({ onSearch, onTabClick }) => {
   ];
 
   return (
-    <header className="Header">
-      <div className="Header__container">
-        <div
-          className="Header__logo"
-          onClick={() => navigate(patches.home.url())}
-        >
-          Story Book
-        </div>
+    <div className="Header__Full">
+      <header className="Header">
+        <div className="Header__container">
+          <div
+            className="Header__logo"
+            onClick={() => navigate(patches.home.url())}
+          >
+            Story Book
+          </div>
 
-        <form className="Header__search" onSubmit={handleSearch}>
-          <input
-            type="text"
-            className="Header__search-input"
-            placeholder="Я ищу..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-          />
-          <button type="submit" className="Header__search-button">
-            <img src={search} alt="Поиск" className="Header__search-icon" />
-          </button>
-        </form>
-
-        <nav className="Header__nav">
-          {tabs.map((tab) => (
-            <button
-              key={tab.id}
-              className={"Header__tab"}
-              onClick={() => handleTabClick(tab.id, tab.path)}
-            >
-              <img
-                src={tab.icon}
-                alt={tab.label}
-                className="Header__tab-icon"
-              />
-              <span className="Header__tab-label">{tab.label}</span>
+          <form className="Header__search" onSubmit={handleSearch}>
+            <input
+              type="text"
+              className="Header__search-input"
+              placeholder="Я ищу..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+            <button type="submit" className="Header__search-button">
+              <img src={search} alt="Поиск" className="Header__search-icon" />
             </button>
-          ))}
-        </nav>
-      </div>
-    </header>
+          </form>
+
+          <nav className="Header__nav">
+            {tabs.map((tab) => (
+              <button
+                key={tab.id}
+                className={"Header__tab"}
+                onClick={() => handleTabClick(tab.id, tab.path)}
+              >
+                <img
+                  src={tab.icon}
+                  alt={tab.label}
+                  className="Header__tab-icon"
+                />
+                <span className="Header__tab-label">{tab.label}</span>
+              </button>
+            ))}
+          </nav>
+        </div>
+      </header>
+    </div>
   );
 };
 

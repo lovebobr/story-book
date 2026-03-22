@@ -2,17 +2,104 @@
 
 .HomePage {
   min-height: 100vh;
+  padding: 0 80px;
 }
 
 .HomePage__content {
-  padding: 40px 20px;
-  max-width: 1440px;
-  margin: 0 auto;
 }
 
-.HomePage__title {
-  color: var(--color-primary);
-  font-size: 36px;
-  font-weight: 600;
-  margin-bottom: 30px;
+.genres-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 40px;
+}
+
+.HomePage__carousel {
+  display: flex;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  gap: 70px;
+  margin-bottom: 60px;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+
+.HomePage__carousel::-webkit-scrollbar {
+  height: 8px;
+}
+
+.HomePage__carousel::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+.HomePage__carousel::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 4px;
+}
+
+.HomePage__carousel-item {
+  flex: 0 0 calc((100% / 4) - (20px * 3 / 4));
+  min-width: 200px;
+}
+
+.HomePage__recommendations-block {
+  border: 2px solid var(--color-primary, #380e41);
+  border-radius: 16px;
+  padding: 30px 60px;
+  margin: 48px 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+.HomePage__recommendations-icon {
+  flex-shrink: 0;
+}
+
+.HomePage__Text {
+  flex: 1;
+  text-align: left;
+}
+
+.HomePage__recommendations-title {
+  font-family: "Montserrat", sans-serif;
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--color-primary, #380e41);
+  margin: 0 0 8px 0;
+}
+
+.HomePage__recommendations-description {
+  font-family: "Montserrat", sans-serif;
+  font-size: 20px;
+  font-weight: 400;
+  color: var(--color-primary, #380e41);
+  margin: 0;
+  line-height: 1.4;
+}
+
+@media (max-width: 768px) {
+  .HomePage__recommendations-block {
+    flex-direction: column;
+    text-align: center;
+    padding: 32px 20px;
+    gap: 20px;
+  }
+
+  .HomePage__Text {
+    text-align: center;
+  }
+
+  .HomePage__recommendations-title {
+    font-size: 28px;
+  }
+
+  .HomePage__recommendations-description {
+    font-size: 18px;
+  }
 }

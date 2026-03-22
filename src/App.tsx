@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { useContext, useEffect, type FC } from "react";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Context } from ".";
 import LoginForm from "./features/auth/ui/LoginForm";
 import RegisterForm from "./features/auth/ui/RegisterForm";
@@ -11,6 +12,9 @@ import HomePage from "./pages/glavnay/ui/HomePage";
 import ProfilePage from "./pages/profile/ui/ProfilePage";
 import BookPage from "./pages/book/ui/BookPage";
 import "./App.css";
+import Footer from "./widgets/footer/Footer";
+
+const queryClient = new QueryClient();
 
 const App: FC = () => {
   const { store } = useContext(Context);
@@ -51,12 +55,12 @@ const App: FC = () => {
   }
 
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route
-          path={patches.login.route}
-          element={
-            <>
+    <QueryClientProvider client={queryClient}>
+      <BrowserRouter>
+        <Routes>
+          <Route
+            path={patches.login.route}
+            element={
               <div className="app">
                 <div className="auth-container">
                   <div className="auth-card">
@@ -64,14 +68,11 @@ const App: FC = () => {
                   </div>
                 </div>
               </div>
-            </>
-          }
-        />
-
-        <Route
-          path={patches.signup.route}
-          element={
-            <>
+            }
+          />
+          <Route
+            path={patches.signup.route}
+            element={
               <div className="app">
                 <div className="auth-container">
                   <div className="auth-card">
@@ -79,46 +80,43 @@ const App: FC = () => {
                   </div>
                 </div>
               </div>
-            </>
-          }
-        />
-
-        <Route
-          path={patches.home.route}
-          element={
-            <>
-              <Header />
-              <HomePage />
-            </>
-          }
-        />
-
-        <Route
-          path={patches.profile.route}
-          element={
-            <>
-              <Header />
-              <ProfilePage />
-            </>
-          }
-        />
-
-        <Route
-          path={patches.book.route}
-          element={
-            <>
-              <Header />
-              <BookPage />
-            </>
-          }
-        />
-
-        <Route
-          path="*"
-          element={<Navigate to={patches.home.route} replace />}
-        />
-      </Routes>
-    </BrowserRouter>
+            }
+          />
+          <Route
+            path={patches.home.route}
+            element={
+              <>
+                <Header />
+                <HomePage />
+              </>
+            }
+          />
+          <Route
+            path={patches.profile.route}
+            element={
+              <>
+                <Header />
+                <ProfilePage />
+              </>
+            }
+          />
+          <Route
+            path={patches.book.route}
+            element={
+              <>
+                <Header />
+                <BookPage />
+              </>
+            }
+          />
+          <Route
+            path="*"
+            element={<Navigate to={patches.home.route} replace />}
+          />
+        </Routes>
+        <Footer />
+      </BrowserRouter>
+    </QueryClientProvider>
   );
 };
 

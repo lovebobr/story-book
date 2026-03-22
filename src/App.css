@@ -12,8 +12,6 @@ body {
   font-family:
     -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", sans-serif;
   background: var(--color-background);
-  padding-left: 80px;
-  padding-right: 80px;
 }
 
 .app {

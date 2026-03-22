@@ -1,0 +1,84 @@
+.BookCard {
+  width: 431px;
+  height: 336px;
+  display: flex;
+  flex-direction: row;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  background: var(--color-background, #fffff5);
+}
+
+.BookCard__image {
+  flex-shrink: 0;
+  width: 200px;
+  height: 100%;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--color-secondary, #f2e5f7);
+}
+
+.BookCard__image--cover {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.BookCard__image--placeholder {
+  width: 60px;
+  height: 60px;
+  object-fit: contain;
+}
+
+.BookCard__content {
+  flex: 1;
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  justify-content: space-between;
+}
+
+.BookCard__top {
+  padding-top: 20px;
+}
+
+.BookCard__bottom {
+  margin-top: auto;
+}
+
+.BookCard__author {
+  font-family: "Montserrat", sans-serif;
+  font-size: 23px;
+  font-weight: 500;
+  color: var(--color-primary, #380e41);
+  letter-spacing: 0.5px;
+  margin: 0;
+}
+
+.BookCard__title {
+  font-family: "Montserrat", sans-serif;
+  font-size: 23px;
+  font-weight: 700;
+  margin: 8px 0;
+  color: var(--color-primary, #380e41);
+}
+
+.BookCard__price {
+  font-family: "Montserrat", sans-serif;
+  font-size: 23px;
+  font-weight: 500;
+  color: var(--color-primary, #380e41);
+  margin: 12px 0;
+}
+
+.BookCard__button {
+  margin-top: 8px;
+}
+
+.BookCard__button button:hover {
+  background-color: var(--color-primary, #380e41);
+  color: var(--color-background, #fffff5);
+}

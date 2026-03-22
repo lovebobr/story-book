@@ -4,10 +4,11 @@
   background: #f2e5f7;
   border: 2px solid #550b65;
   border-radius: 21px;
-  box-shadow: 0 10px 30px rgba(56, 14, 65, 0.08);
+  box-shadow: 0 10px 30px rgba(56, 14, 65, 0.4);
   overflow: hidden;
   position: relative;
   min-height: 400px;
+  margin-bottom: 100px;
 }
 
 .Banner__content {
@@ -26,14 +27,19 @@
   max-width: 600px;
 }
 
+.Banner__title-accent {
+  color: #bd00aa;
+}
+
 .Banner__title {
-  font-family: "SONGER Grotesque", sans-serif;
   font-weight: 700;
   font-size: 100px;
   color: #550b65;
+  font-family: "MyCustomFont";
   line-height: 0.9;
   margin: 0 0 20px 0;
   text-transform: uppercase;
+  white-space: nowrap;
 }
 
 .Banner__discount {

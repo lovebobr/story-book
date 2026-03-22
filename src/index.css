@@ -1,5 +1,13 @@
+@font-face {
+  font-family: "MyCustomFont";
+  src: url("./assets/fonts/Grotesque.otf") format("opentype");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
 :root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: "MyCustomFont", Montserrat, sans-serif;
   line-height: 1.5;
   font-weight: 400;
 
@@ -30,6 +38,9 @@ body {
 h1 {
   font-size: 3.2em;
   line-height: 1.1;
+  color: var(--color-primary);
+  text-indent: 78px;
+  margin-bottom: 57px;
 }
 
 button {

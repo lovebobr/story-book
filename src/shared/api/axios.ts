@@ -16,9 +16,7 @@ $api.interceptors.request.use((config) => {
 });
 
 $api.interceptors.response.use(
-  (config) => {
-    return config;
-  },
+  (config) => config,
   async (error) => {
     const originalRequest = error.config;
 
@@ -27,6 +25,7 @@ $api.interceptors.response.use(
 
       try {
         const refreshToken = localStorage.getItem("refreshToken");
+        const accessToken = localStorage.getItem("accessToken");
 
         if (!refreshToken) {
           throw new Error("Нет refresh токена");
@@ -34,8 +33,12 @@ $api.interceptors.response.use(
 
         const response = await axios.post<AuthResponse>(
           `${API_URL}/auth/refresh`,
+          null, 
           {
-            refresh_token: refreshToken,
+            headers: {
+              Authorization: `Bearer ${accessToken || ""}`,
+              "X-Refresh-Token": refreshToken,
+            },
           },
         );
 
@@ -43,7 +46,11 @@ $api.interceptors.response.use(
         localStorage.setItem("refreshToken", response.data.refresh_token);
 
         return $api.request(originalRequest);
-      } catch (e) {}
+      } catch (e) {
+        localStorage.removeItem("accessToken");
+        localStorage.removeItem("refreshToken");
+        throw e;
+      }
     }
 
     throw error;

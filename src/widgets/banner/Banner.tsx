@@ -12,11 +12,9 @@ const Banner: React.FC<BannerProps> = ({ onButtonClick }) => {
     <div className="Banner">
       <div className="Banner__content">
         <div className="Banner__text">
-          <h1 className="Banner__title">
-            Книжная
-            <br />
-            весна
-          </h1>
+          <div className="Banner__title">
+            Книжная ве<span className="Banner__title-accent">с</span>на
+          </div>
           <p className="Banner__discount">до -30%</p>
           <p className="Banner__description">
             Скидки на тысячи книг: бестселлеры, новинки, подарки. Успейте
