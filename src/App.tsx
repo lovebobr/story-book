@@ -11,9 +11,10 @@ import Header from "./widgets/header/Header";
 import HomePage from "./pages/glavnay/ui/HomePage";
 import ProfilePage from "./pages/profile/ui/ProfilePage";
 import BookPage from "./pages/book/ui/BookPage";
-import FavoritesPage from "./pages/favorites/ui/FavoritesPage";
+import FavoritesPage from "./pages/favorites/ui/FavoritesPage"; // добавлен импорт
+import CatalogPage from "./pages/catalog/ui/CatalogPage"; // добавлен импорт
 import Footer from "./widgets/footer/Footer";
-import "./App.css";
+import "./App.css"; // дубликат удалён
 
 const queryClient = new QueryClient();
 
@@ -45,13 +46,13 @@ const App: FC = () => {
   const { store } = useContext(Context);
 
   useEffect(() => {
-
     if (localStorage.getItem("refreshToken")) {
       store.checkAuth();
     } else {
       store.setLoading(false);
     }
-  }, []); 
+  }, []);
+
   const handleLogin = async (data: ILoginData) => {
     await store.login(data.email, data.password);
   };
@@ -131,6 +132,7 @@ const App: FC = () => {
           <Route
             path={patches.book.route}
             element={
+            
               <ProtectedRoute>
                 <MainLayout>
                   <BookPage />
@@ -148,6 +150,15 @@ const App: FC = () => {
               </ProtectedRoute>
             }
           />
+          <Route
+            path={patches.catalog.route}
+            element={
+              <MainLayout>
+                <CatalogPage />
+              </MainLayout>
+            }
+          />
+        
           <Route
             path="*"
             element={<Navigate to={patches.home.route} replace />}
