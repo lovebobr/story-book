@@ -11,6 +11,7 @@ import Header from "./widgets/header/Header";
 import HomePage from "./pages/glavnay/ui/HomePage";
 import ProfilePage from "./pages/profile/ui/ProfilePage";
 import BookPage from "./pages/book/ui/BookPage";
+import CatalogPage from "./pages/catalog/ui/CatalogPage";
 import "./App.css";
 import Footer from "./widgets/footer/Footer";
 
@@ -106,6 +107,15 @@ const App: FC = () => {
               <>
                 <Header />
                 <BookPage />
+              </>
+            }
+          />
+          <Route
+            path={patches.catalog.route}
+            element={
+              <>
+                <Header />
+                <CatalogPage />
               </>
             }
           />

@@ -16,7 +16,6 @@ const HomePage: React.FC = () => {
   const getBooks = useGetBooks();
   const [books, setBooks] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<unknown>(null);
 
   useEffect(() => {
     const fetchBooks = async () => {
@@ -25,7 +24,7 @@ const HomePage: React.FC = () => {
         const data = await getBooks();
         setBooks(data);
       } catch (err) {
-        setError(err);
+        console.error(err);
       } finally {
         setLoading(false);
       }

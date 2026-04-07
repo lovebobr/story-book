@@ -23,4 +23,9 @@ export const patches = {
     route: "/book/:id",
     url: ({ id }: { id: string }) => `/book/${id}`,
   },
+
+  catalog: {
+    route: "/catalog",
+    url: () => "/catalog",
+  },
 };

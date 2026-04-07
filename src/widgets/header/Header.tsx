@@ -16,7 +16,6 @@ interface HeaderProps {
 
 const Header: React.FC<HeaderProps> = ({ onSearch, onTabClick }) => {
   const [searchQuery, setSearchQuery] = useState("");
-  const [activeTab, setActiveTab] = useState("account");
   const navigate = useNavigate();
 
   const handleSearch = (e: React.FormEvent) => {
@@ -27,7 +26,6 @@ const Header: React.FC<HeaderProps> = ({ onSearch, onTabClick }) => {
   };
 
   const handleTabClick = (tab: string, path: string) => {
-    setActiveTab(tab);
     if (onTabClick) {
       onTabClick(tab);
     }
