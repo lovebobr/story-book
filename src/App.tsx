@@ -11,7 +11,10 @@ import Header from "./widgets/header/Header";
 import HomePage from "./pages/glavnay/ui/HomePage";
 import ProfilePage from "./pages/profile/ui/ProfilePage";
 import BookPage from "./pages/book/ui/BookPage";
+import CatalogPage from "./pages/catalog/ui/CatalogPage";
+import { CartUiProvider } from "./features/cart/CartUiContext";
 import FavoritesPage from "./pages/favorites/ui/FavoritesPage";
+import "./App.css";
 import Footer from "./widgets/footer/Footer";
 import { AuthProvider } from "./app/providers/AuthProvider";
 import "./App.css";
@@ -84,7 +87,8 @@ const App: FC = () => {
     <AuthProvider>
       <QueryClientProvider client={queryClient}>
         <BrowserRouter>
-          <Routes>
+          <CartUiProvider>
+        <Routes>
             <Route
               path={patches.login.route}
               element={
@@ -152,11 +156,21 @@ const App: FC = () => {
               }
             />
             <Route
+            path={patches.catalog.route}
+            element={
+              <>
+                <Header />
+                <CatalogPage />
+              </>
+            }
+          />
+          <Route
               path="*"
               element={<Navigate to={patches.home.route} replace />}
             />
           </Routes>
-        </BrowserRouter>
+          </CartUiProvider>
+      </BrowserRouter>
       </QueryClientProvider>
     </AuthProvider>
   );

@@ -1,0 +1,248 @@
+@import url("../../../variables.css");
+
+.CatalogPage {
+  min-height: calc(100vh - 80px);
+  padding: 32px 80px 48px;
+  background: var(--color-background);
+}
+
+.CatalogPage__topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 18px;
+}
+
+.CatalogPage__found {
+  font-family: Montserrat, sans-serif;
+  font-weight: 500;
+  font-size: 18px;
+  color: #550b65;
+}
+
+.CatalogPage__sort-select {
+  font-family: Montserrat, sans-serif;
+  font-weight: 500;
+  font-size: 16px;
+  color: #550b65;
+  background: #fff;
+  border: 1px solid #550b65;
+  border-radius: 12px;
+  padding: 10px 12px;
+  outline: none;
+}
+
+.CatalogPage__sort-select:focus {
+  box-shadow: 0 0 0 3px rgba(85, 11, 101, 0.14);
+}
+
+.CatalogPage__layout {
+  display: flex;
+  align-items: flex-start;
+  gap: 32px;
+}
+
+.CatalogPage__filters {
+  flex: 0 0 25%;
+  max-width: 25%;
+  min-width: 300px;
+}
+
+.CatalogPage__filters-form {
+  border: 1px solid #550b65;
+  border-radius: 16px;
+  background: #fffff5;
+  box-shadow: 3px 17px 37px 4px rgba(85, 11, 101, 0.31);
+  padding: 24px 20px 20px;
+}
+
+.CatalogPage__section {
+  margin-bottom: 28px;
+}
+
+.CatalogPage__section-title {
+  font-family: Montserrat, sans-serif;
+  font-weight: 600;
+  font-size: 24px;
+  line-height: 1.2;
+  color: #550b65;
+  margin: 0 0 16px;
+}
+
+.CatalogPage__price-row {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.CatalogPage__price-field {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 10px;
+  border: 1px solid #550b65;
+  border-radius: 10px;
+  background: #fff;
+}
+
+.CatalogPage__price-hint {
+  font-family: Montserrat, sans-serif;
+  font-weight: 500;
+  font-size: 16px;
+  color: #550b65;
+  flex-shrink: 0;
+}
+
+.CatalogPage__price-input {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  background: transparent;
+  font-family: Montserrat, sans-serif;
+  font-weight: 500;
+  font-size: 20px;
+  color: #550b65;
+  outline: none;
+}
+
+.CatalogPage__options {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.CatalogPage__option {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  cursor: pointer;
+}
+
+.CatalogPage__option-text {
+  font-family: Montserrat, sans-serif;
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 1.25;
+  color: #550b65;
+}
+
+.CatalogPage__checkbox {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 22px;
+  height: 22px;
+  margin-top: 2px;
+  flex-shrink: 0;
+  border: 1px solid #550b65;
+  border-radius: 6px;
+  background: #fff;
+  cursor: pointer;
+  position: relative;
+}
+
+.CatalogPage__checkbox:checked {
+  background: #550b65;
+}
+
+.CatalogPage__checkbox:checked::after {
+  content: "";
+  position: absolute;
+  left: 6px;
+  top: 2px;
+  width: 6px;
+  height: 11px;
+  border: solid #fff;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+.CatalogPage__actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding-top: 20px;
+  margin-top: 8px;
+  border-top: 1px solid rgba(85, 11, 101, 0.25);
+}
+
+.CatalogPage__btn {
+  font-family: Montserrat, sans-serif;
+  font-weight: 600;
+  font-size: 18px;
+  padding: 12px 20px;
+  border-radius: 12px;
+  cursor: pointer;
+  border: 1px solid #550b65;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.CatalogPage__btn--primary {
+  background: #550b65;
+  color: #fff;
+}
+
+.CatalogPage__btn--primary:hover {
+  background: #44094f;
+}
+
+.CatalogPage__btn--secondary {
+  background: #fff;
+  color: #550b65;
+}
+
+.CatalogPage__btn--secondary:hover {
+  background: rgba(85, 11, 101, 0.06);
+}
+
+.CatalogPage__main {
+  flex: 1;
+  min-height: 200px;
+  min-width: 0;
+}
+
+.CatalogPage__error {
+  font-family: Montserrat, sans-serif;
+  font-weight: 500;
+  font-size: 16px;
+  color: #550b65;
+  margin-bottom: 14px;
+}
+
+.CatalogPage__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 24px;
+  align-items: start;
+}
+
+.CatalogPage__grid-item {
+  display: flex;
+  justify-content: center;
+}
+
+.CatalogPage__grid .BookCard {
+  width: 100%;
+  max-width: 431px;
+}
+
+@media (max-width: 900px) {
+  .CatalogPage {
+    padding: 24px 24px 40px;
+  }
+
+  .CatalogPage__layout {
+    flex-direction: column;
+  }
+
+  .CatalogPage__filters {
+    flex: 1 1 auto;
+    max-width: none;
+    width: 100%;
+  }
+}

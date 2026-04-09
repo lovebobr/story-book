@@ -28,4 +28,9 @@ export const patches = {
     route: "/favorites",
     url: () => "/favorites",
   },
+
+  catalog: {
+    route: "/catalog",
+    url: () => "/catalog",
+  },
 };
