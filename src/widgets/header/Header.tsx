@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { patches } from "../../app/patches";
+import { useCartUi } from "../../features/cart/CartUiContext";
 import "./Header.css";
 
 import acc from "../../assets/icons/acc.svg";
@@ -17,6 +18,7 @@ interface HeaderProps {
 const Header: React.FC<HeaderProps> = ({ onSearch, onTabClick }) => {
   const [searchQuery, setSearchQuery] = useState("");
   const navigate = useNavigate();
+  const { openCart } = useCartUi();
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -30,6 +32,14 @@ const Header: React.FC<HeaderProps> = ({ onSearch, onTabClick }) => {
       onTabClick(tab);
     }
     navigate(path);
+  };
+
+  const handleNavClick = (tabId: string, path: string) => {
+    if (tabId === "cart") {
+      openCart();
+      return;
+    }
+    handleTabClick(tabId, path);
   };
 
   const tabs = [
@@ -78,7 +88,7 @@ const Header: React.FC<HeaderProps> = ({ onSearch, onTabClick }) => {
               <button
                 key={tab.id}
                 className={"Header__tab"}
-                onClick={() => handleTabClick(tab.id, tab.path)}
+                onClick={() => handleNavClick(tab.id, tab.path)}
               >
                 <img
                   src={tab.icon}

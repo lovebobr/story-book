@@ -1,4 +1,5 @@
 import axios from "axios";
+import type { InternalAxiosRequestConfig } from "axios";
 import type { AuthResponse } from "../../models/response/AuthResponse";
 
 export const API_URL = `http://localhost:8080`;
@@ -19,7 +20,7 @@ const processQueue = (error: Error | null, token: string | null = null) => {
   failedQueue = [];
 };
 
-$api.interceptors.request.use((config) => {
+$api.interceptors.request.use((config: InternalAxiosRequestConfig) => {
   const token = localStorage.getItem("accessToken");
   if (token) config.headers.Authorization = `Bearer ${token}`;
   else console.warn("No access token");

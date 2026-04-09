@@ -1,18 +1,17 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import BookCard from "../../../widgets/bookCard/BookCard";
-import { useGetBooks } from "../../../entities";
+import { useAddToCartMutation, useGetBooks } from "../../../entities";
+import type { IBook } from "../../../entities/book/model/types";
+import { patches } from "../../../app/patches";
+import { handleCartUnauthorized } from "../../../shared/lib/cartAuthError";
+import {
+  CATALOG_YEAR_RANGE_LABELS,
+  filterCatalogBooks,
+  type CatalogAppliedFilters,
+  type CatalogYearRangeLabel,
+} from "../lib/filterCatalogBooks";
 import "./CatalogPage.css";
-
-const CATEGORIES = [
-  "Художественная литература",
-  "Учебная литература",
-  "Книги для детей",
-  "Книги для подростков",
-  "Комиксы и манга",
-  "Книги на иностранных языках",
-  "Профессиональная литература",
-  "Нехудожественная литература",
-] as const;
 
 const GENRES = [
   "Детективы",
@@ -26,14 +25,6 @@ const GENRES = [
 
 const PUBLISHERS = ["АСТ", "Эксмо", "Росмэн"] as const;
 
-const YEARS = [
-  "2025 - 2026",
-  "2020 - 2024",
-  "2010 - 2019",
-  "2000 - 2009",
-  "До 2000",
-] as const;
-
 function createEmptySelection<T extends string>(keys: readonly T[]) {
   return keys.reduce(
     (acc, key) => {
@@ -44,6 +35,20 @@ function createEmptySelection<T extends string>(keys: readonly T[]) {
   );
 }
 
+function createYearSelection() {
+  return createEmptySelection(CATALOG_YEAR_RANGE_LABELS);
+}
+
+function defaultFilters(): CatalogAppliedFilters {
+  return {
+    priceFrom: "",
+    priceTo: "",
+    genres: createEmptySelection(GENRES),
+    publishers: createEmptySelection(PUBLISHERS),
+    years: createYearSelection(),
+  };
+}
+
 function digitsOnly(raw: string) {
   return raw.replace(/\D/g, "");
 }
@@ -51,44 +56,50 @@ function digitsOnly(raw: string) {
 type SortKey = "popular" | "priceAsc" | "priceDesc";
 
 const CatalogPage: React.FC = () => {
+  const navigate = useNavigate();
   const getBooks = useGetBooks();
-  const [books, setBooks] = useState<any[]>([]);
+  const [books, setBooks] = useState<IBook[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<unknown>(null);
   const [sortKey, setSortKey] = useState<SortKey>("popular");
 
-  const [priceFrom, setPriceFrom] = useState("300");
-  const [priceTo, setPriceTo] = useState("5400");
-  const [categories, setCategories] = useState(() =>
-    createEmptySelection(CATEGORIES),
+  const [draft, setDraft] = useState<CatalogAppliedFilters>(() =>
+    defaultFilters(),
   );
-  const [genres, setGenres] = useState(() => createEmptySelection(GENRES));
-  const [publishers, setPublishers] = useState(() =>
-    createEmptySelection(PUBLISHERS),
+  const [applied, setApplied] = useState<CatalogAppliedFilters>(() =>
+    defaultFilters(),
   );
-  const [years, setYears] = useState(() => createEmptySelection(YEARS));
 
-  const toggle = useCallback(
-    <T extends string>(
-      setter: React.Dispatch<React.SetStateAction<Record<T, boolean>>>,
-      key: T,
-    ) => {
-      setter((prev) => ({ ...prev, [key]: !prev[key] }));
-    },
-    [],
-  );
+  const toggleGenre = useCallback((label: (typeof GENRES)[number]) => {
+    setDraft((d) => ({
+      ...d,
+      genres: { ...d.genres, [label]: !d.genres[label] },
+    }));
+  }, []);
+
+  const togglePublisher = useCallback((label: (typeof PUBLISHERS)[number]) => {
+    setDraft((d) => ({
+      ...d,
+      publishers: { ...d.publishers, [label]: !d.publishers[label] },
+    }));
+  }, []);
+
+  const toggleYear = useCallback((label: CatalogYearRangeLabel) => {
+    setDraft((d) => ({
+      ...d,
+      years: { ...d.years, [label]: !d.years[label] },
+    }));
+  }, []);
 
   const handleReset = () => {
-    setPriceFrom("300");
-    setPriceTo("5400");
-    setCategories(createEmptySelection(CATEGORIES));
-    setGenres(createEmptySelection(GENRES));
-    setPublishers(createEmptySelection(PUBLISHERS));
-    setYears(createEmptySelection(YEARS));
+    const initial = defaultFilters();
+    setDraft(initial);
+    setApplied(initial);
   };
 
   const handleApply = (e: React.FormEvent) => {
     e.preventDefault();
+    setApplied({ ...draft });
   };
 
   useEffect(() => {
@@ -107,20 +118,36 @@ const CatalogPage: React.FC = () => {
     fetchBooks();
   }, [getBooks]);
 
+  const filteredBooks = useMemo(
+    () => filterCatalogBooks(books, applied),
+    [books, applied],
+  );
+
   const visibleBooks = useMemo(() => {
-    const list = [...books];
+    const list = [...filteredBooks];
     if (sortKey === "priceAsc") {
       list.sort((a, b) => (a?.cost ?? 0) - (b?.cost ?? 0));
     } else if (sortKey === "priceDesc") {
       list.sort((a, b) => (b?.cost ?? 0) - (a?.cost ?? 0));
     }
     return list;
-  }, [books, sortKey]);
+  }, [filteredBooks, sortKey]);
 
   const hasError = error != null;
 
+  const addToCart = useAddToCartMutation();
+
   const handleAddToCart = (bookId: string) => {
-    console.log("Добавлено в корзину:", bookId);
+    addToCart.mutate(
+      { book_id: bookId, amount: 1 },
+      {
+        onError: (err) => {
+          if (!handleCartUnauthorized(err, navigate, patches.login.route)) {
+            console.error(err);
+          }
+        },
+      },
+    );
   };
 
   return (
@@ -157,8 +184,13 @@ const CatalogPage: React.FC = () => {
                     inputMode="numeric"
                     autoComplete="off"
                     aria-label="Минимальная цена в рублях"
-                    value={priceFrom}
-                    onChange={(ev) => setPriceFrom(digitsOnly(ev.target.value))}
+                    value={draft.priceFrom}
+                    onChange={(ev) =>
+                      setDraft((d) => ({
+                        ...d,
+                        priceFrom: digitsOnly(ev.target.value),
+                      }))
+                    }
                   />
                   <span className="CatalogPage__price-hint">руб</span>
                 </label>
@@ -170,31 +202,17 @@ const CatalogPage: React.FC = () => {
                     inputMode="numeric"
                     autoComplete="off"
                     aria-label="Максимальная цена в рублях"
-                    value={priceTo}
-                    onChange={(ev) => setPriceTo(digitsOnly(ev.target.value))}
+                    value={draft.priceTo}
+                    onChange={(ev) =>
+                      setDraft((d) => ({
+                        ...d,
+                        priceTo: digitsOnly(ev.target.value),
+                      }))
+                    }
                   />
                   <span className="CatalogPage__price-hint">руб</span>
                 </label>
               </div>
-            </section>
-
-            <section className="CatalogPage__section">
-              <h2 className="CatalogPage__section-title">Категория</h2>
-              <ul className="CatalogPage__options">
-                {CATEGORIES.map((label) => (
-                  <li key={label}>
-                    <label className="CatalogPage__option">
-                      <input
-                        className="CatalogPage__checkbox"
-                        type="checkbox"
-                        checked={categories[label]}
-                        onChange={() => toggle(setCategories, label)}
-                      />
-                      <span className="CatalogPage__option-text">{label}</span>
-                    </label>
-                  </li>
-                ))}
-              </ul>
             </section>
 
             <section className="CatalogPage__section">
@@ -206,8 +224,8 @@ const CatalogPage: React.FC = () => {
                       <input
                         className="CatalogPage__checkbox"
                         type="checkbox"
-                        checked={genres[label]}
-                        onChange={() => toggle(setGenres, label)}
+                        checked={draft.genres[label]}
+                        onChange={() => toggleGenre(label)}
                       />
                       <span className="CatalogPage__option-text">{label}</span>
                     </label>
@@ -225,8 +243,8 @@ const CatalogPage: React.FC = () => {
                       <input
                         className="CatalogPage__checkbox"
                         type="checkbox"
-                        checked={publishers[label]}
-                        onChange={() => toggle(setPublishers, label)}
+                        checked={draft.publishers[label]}
+                        onChange={() => togglePublisher(label)}
                       />
                       <span className="CatalogPage__option-text">{label}</span>
                     </label>
@@ -238,14 +256,14 @@ const CatalogPage: React.FC = () => {
             <section className="CatalogPage__section">
               <h2 className="CatalogPage__section-title">Год издания</h2>
               <ul className="CatalogPage__options">
-                {YEARS.map((label) => (
+                {CATALOG_YEAR_RANGE_LABELS.map((label) => (
                   <li key={label}>
                     <label className="CatalogPage__option">
                       <input
                         className="CatalogPage__checkbox"
                         type="checkbox"
-                        checked={years[label]}
-                        onChange={() => toggle(setYears, label)}
+                        checked={draft.years[label]}
+                        onChange={() => toggleYear(label)}
                       />
                       <span className="CatalogPage__option-text">{label}</span>
                     </label>

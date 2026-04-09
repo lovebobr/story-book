@@ -13,6 +13,7 @@ import ProfilePage from "./pages/profile/ui/ProfilePage";
 import BookPage from "./pages/book/ui/BookPage";
 import FavoritesPage from "./pages/favorites/ui/FavoritesPage"; // добавлен импорт
 import CatalogPage from "./pages/catalog/ui/CatalogPage"; // добавлен импорт
+import { CartUiProvider } from "./features/cart/CartUiContext";
 import Footer from "./widgets/footer/Footer";
 import "./App.css"; // дубликат удалён
 
@@ -82,88 +83,89 @@ const App: FC = () => {
   return (
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
-        <Routes>
-          <Route
-            path={patches.login.route}
-            element={
-              <PublicRoute>
-                <div className="app">
-                  <div className="auth-container">
-                    <div className="auth-card">
-                      <LoginForm onSubmit={handleLogin} />
+        <CartUiProvider>
+          <Routes>
+            <Route
+              path={patches.login.route}
+              element={
+                <PublicRoute>
+                  <div className="app">
+                    <div className="auth-container">
+                      <div className="auth-card">
+                        <LoginForm onSubmit={handleLogin} />
+                      </div>
                     </div>
                   </div>
-                </div>
-              </PublicRoute>
-            }
-          />
-          <Route
-            path={patches.signup.route}
-            element={
-              <PublicRoute>
-                <div className="app">
-                  <div className="auth-container">
-                    <div className="auth-card">
-                      <RegisterForm onSubmit={handleSignup} />
+                </PublicRoute>
+              }
+            />
+            <Route
+              path={patches.signup.route}
+              element={
+                <PublicRoute>
+                  <div className="app">
+                    <div className="auth-container">
+                      <div className="auth-card">
+                        <RegisterForm onSubmit={handleSignup} />
+                      </div>
                     </div>
                   </div>
-                </div>
-              </PublicRoute>
-            }
-          />
-          <Route
-            path={patches.home.route}
-            element={
-              <MainLayout>
-                <HomePage />
-              </MainLayout>
-            }
-          />
-          <Route
-            path={patches.profile.route}
-            element={
-              <ProtectedRoute>
+                </PublicRoute>
+              }
+            />
+            <Route
+              path={patches.home.route}
+              element={
                 <MainLayout>
-                  <ProfilePage />
+                  <HomePage />
                 </MainLayout>
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path={patches.book.route}
-            element={
-            
-              <ProtectedRoute>
+              }
+            />
+            <Route
+              path={patches.profile.route}
+              element={
+                <ProtectedRoute>
+                  <MainLayout>
+                    <ProfilePage />
+                  </MainLayout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path={patches.book.route}
+              element={
+                <ProtectedRoute>
+                  <MainLayout>
+                    <BookPage />
+                  </MainLayout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path={patches.favorites.route}
+              element={
+                <ProtectedRoute>
+                  <MainLayout>
+                    <FavoritesPage />
+                  </MainLayout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path={patches.catalog.route}
+              element={
                 <MainLayout>
-                  <BookPage />
+                  <CatalogPage />
                 </MainLayout>
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path={patches.favorites.route}
-            element={
-              <ProtectedRoute>
-                <MainLayout>
-                  <FavoritesPage />
-                </MainLayout>
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path={patches.catalog.route}
-            element={
-              <MainLayout>
-                <CatalogPage />
-              </MainLayout>
-            }
-          />
-        
-          <Route
-            path="*"
-            element={<Navigate to={patches.home.route} replace />}
-          />
-        </Routes>
+              }
+            />
+
+            <Route
+              path="*"
+              element={<Navigate to={patches.home.route} replace />}
+            />
+          </Routes>
+        </CartUiProvider>
       </BrowserRouter>
     </QueryClientProvider>
   );
