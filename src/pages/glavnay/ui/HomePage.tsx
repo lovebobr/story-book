@@ -74,6 +74,7 @@ const HomePage: React.FC = () => {
                 price={book.cost}
                 image={book.image}
                 onAddToCart={() => handleAddToCart(book.id)}
+                onCardClick={() => navigate(`/book/${book.id}`)}
               />
             </div>
           ))}
@@ -88,6 +89,7 @@ const HomePage: React.FC = () => {
                 price={book.cost}
                 image={book.image}
                 onAddToCart={() => handleAddToCart(book.id)}
+                onCardClick={() => navigate(`/book/${book.id}`)}
               />
             </div>
           ))}

@@ -10,6 +10,7 @@ interface BookCardProps {
   price: number;
   image?: string;
   onAddToCart?: () => void;
+  onCardClick?: () => void;
 }
 
 const BookCard: React.FC<BookCardProps> = ({
@@ -18,11 +19,25 @@ const BookCard: React.FC<BookCardProps> = ({
   price,
   image,
   onAddToCart,
+  onCardClick,
 }) => {
   const hasImage = !!image;
 
+  const handleCardClick = () => {
+    if (onCardClick) onCardClick();
+  };
+
+  const handleButtonClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (onAddToCart) onAddToCart();
+  };
+
   return (
-    <div className="BookCard">
+    <div
+      className="BookCard"
+      onClick={handleCardClick}
+      style={{ cursor: "pointer" }}
+    >
       <div className="BookCard__image">
         {hasImage ? (
           <img src={image} alt={title} className="BookCard__image--cover" />
@@ -46,7 +61,7 @@ const BookCard: React.FC<BookCardProps> = ({
               size="small"
               variant="filled"
               leftIcon={<img src={saveIcon} alt="save" />}
-              onClick={onAddToCart}
+              onClick={handleButtonClick}
             >
               В корзину
             </Button>

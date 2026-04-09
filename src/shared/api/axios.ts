@@ -11,48 +11,59 @@ $api.interceptors.request.use((config) => {
   const token = localStorage.getItem("accessToken");
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
+  } else {
+    console.warn("No access token in localStorage");
   }
   return config;
 });
 
 $api.interceptors.response.use(
-  (config) => config,
+  (response) => response,
   async (error) => {
     const originalRequest = error.config;
 
     if (error.response?.status === 401 && !originalRequest._isRetry) {
       originalRequest._isRetry = true;
 
-      try {
-        const refreshToken = localStorage.getItem("refreshToken");
-        const accessToken = localStorage.getItem("accessToken");
-
-        if (!refreshToken) {
-          throw new Error("Нет refresh токена");
+      const refreshToken = localStorage.getItem("refreshToken");
+      if (!refreshToken) {
+        localStorage.removeItem("accessToken");
+        localStorage.removeItem("refreshToken");
+        if (typeof window !== "undefined") {
+          window.location.href = "/login";
         }
+        return Promise.reject(error);
+      }
 
+      try {
         const response = await axios.post<AuthResponse>(
           `${API_URL}/auth/refresh`,
-          null, 
+          { refresh_token: refreshToken },
           {
             headers: {
-              Authorization: `Bearer ${accessToken || ""}`,
-              "X-Refresh-Token": refreshToken,
+              "Content-Type": "application/json",
             },
           },
         );
 
-        localStorage.setItem("accessToken", response.data.access_token);
-        localStorage.setItem("refreshToken", response.data.refresh_token);
+        const newAccessToken = response.data.access_token;
+        const newRefreshToken = response.data.refresh_token;
 
-        return $api.request(originalRequest);
-      } catch (e) {
+        localStorage.setItem("accessToken", newAccessToken);
+        localStorage.setItem("refreshToken", newRefreshToken);
+
+        originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
+        return $api(originalRequest);
+      } catch (refreshError) {
         localStorage.removeItem("accessToken");
         localStorage.removeItem("refreshToken");
-        throw e;
+        if (typeof window !== "undefined") {
+          window.location.href = "/login";
+        }
+        return Promise.reject(refreshError);
       }
     }
 
-    throw error;
+    return Promise.reject(error);
   },
 );

@@ -1,5 +1,5 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import { useContext, useEffect, type FC } from "react";
+import { useContext, useEffect, type FC, type JSX } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Context } from ".";
 import LoginForm from "./features/auth/ui/LoginForm";
@@ -11,10 +11,36 @@ import Header from "./widgets/header/Header";
 import HomePage from "./pages/glavnay/ui/HomePage";
 import ProfilePage from "./pages/profile/ui/ProfilePage";
 import BookPage from "./pages/book/ui/BookPage";
-import "./App.css";
+import FavoritesPage from "./pages/favorites/ui/FavoritesPage";
 import Footer from "./widgets/footer/Footer";
+import { AuthProvider } from "./app/providers/AuthProvider";
+import "./App.css";
 
 const queryClient = new QueryClient();
+
+const ProtectedRoute: FC<{ children: JSX.Element }> = ({ children }) => {
+  const { store } = useContext(Context);
+  if (!store.isAuth) {
+    return <Navigate to={patches.login.route} replace />;
+  }
+  return children;
+};
+
+const PublicRoute: FC<{ children: JSX.Element }> = ({ children }) => {
+  const { store } = useContext(Context);
+  if (store.isAuth) {
+    return <Navigate to={patches.home.route} replace />;
+  }
+  return children;
+};
+
+const MainLayout: FC<{ children: React.ReactNode }> = ({ children }) => (
+  <>
+    <Header />
+    {children}
+    <Footer />
+  </>
+);
 
 const App: FC = () => {
   const { store } = useContext(Context);
@@ -55,68 +81,84 @@ const App: FC = () => {
   }
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <BrowserRouter>
-        <Routes>
-          <Route
-            path={patches.login.route}
-            element={
-              <div className="app">
-                <div className="auth-container">
-                  <div className="auth-card">
-                    <LoginForm onSubmit={handleLogin} />
+    <AuthProvider>
+      <QueryClientProvider client={queryClient}>
+        <BrowserRouter>
+          <Routes>
+            <Route
+              path={patches.login.route}
+              element={
+                <PublicRoute>
+                  <div className="app">
+                    <div className="auth-container">
+                      <div className="auth-card">
+                        <LoginForm onSubmit={handleLogin} />
+                      </div>
+                    </div>
                   </div>
-                </div>
-              </div>
-            }
-          />
-          <Route
-            path={patches.signup.route}
-            element={
-              <div className="app">
-                <div className="auth-container">
-                  <div className="auth-card">
-                    <RegisterForm onSubmit={handleSignup} />
+                </PublicRoute>
+              }
+            />
+            <Route
+              path={patches.signup.route}
+              element={
+                <PublicRoute>
+                  <div className="app">
+                    <div className="auth-container">
+                      <div className="auth-card">
+                        <RegisterForm onSubmit={handleSignup} />
+                      </div>
+                    </div>
                   </div>
-                </div>
-              </div>
-            }
-          />
-          <Route
-            path={patches.home.route}
-            element={
-              <>
-                <Header />
-                <HomePage />
-              </>
-            }
-          />
-          <Route
-            path={patches.profile.route}
-            element={
-              <>
-                <Header />
-                <ProfilePage />
-              </>
-            }
-          />
-          <Route
-            path={patches.book.route}
-            element={
-              <>
-                <Header />
-                <BookPage />
-              </>
-            }
-          />
-          <Route
-            path="*"
-            element={<Navigate to={patches.home.route} replace />}
-          />
-        </Routes>
-        <Footer />
-      </BrowserRouter>
-    </QueryClientProvider>
+                </PublicRoute>
+              }
+            />
+            <Route
+              path={patches.home.route}
+              element={
+                <MainLayout>
+                  <HomePage />
+                </MainLayout>
+              }
+            />
+            <Route
+              path={patches.profile.route}
+              element={
+                <ProtectedRoute>
+                  <MainLayout>
+                    <ProfilePage />
+                  </MainLayout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path={patches.book.route}
+              element={
+                <ProtectedRoute>
+                  <MainLayout>
+                    <BookPage />
+                  </MainLayout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path={patches.favorites.route}
+              element={
+                <ProtectedRoute>
+                  <MainLayout>
+                    <FavoritesPage />
+                  </MainLayout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="*"
+              element={<Navigate to={patches.home.route} replace />}
+            />
+          </Routes>
+        </BrowserRouter>
+      </QueryClientProvider>
+    </AuthProvider>
   );
 };
 

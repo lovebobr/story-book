@@ -1,0 +1,20 @@
+.container {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.starWrapper {
+  cursor: pointer;
+  transition: transform 0.1s ease;
+}
+
+.starWrapper:hover {
+  transform: scale(1.1);
+}
+
+.loader {
+  margin-left: 8px;
+  font-size: 14px;
+  color: #666;
+}

@@ -4,6 +4,7 @@ import { patches } from "./patches";
 import HomePage from "../pages/glavnay/ui/HomePage";
 import ProfilePage from "../pages/profile/ui/ProfilePage";
 import BookPage from "../pages/book/ui/BookPage";
+import FavoritesPage from "../pages/favorites/ui/FavoritesPage";
 
 export default () => {
   return renderRoutes([
@@ -21,6 +22,11 @@ export default () => {
       exact: true,
       path: patches.book.route,
       component: BookPage,
+    },
+    {
+      exact: true,
+      path: patches.favorites.route,
+      component: FavoritesPage,
     },
   ]);
 };

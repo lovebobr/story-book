@@ -7,7 +7,7 @@ export default class AuthService {
     email: string,
     password: string,
   ): Promise<AxiosResponse<AuthResponse>> {
-    return $api.post<AuthResponse>("/login", { email, password });
+    return $api.post<AuthResponse>("/auth/login", { email, password });
   }
 
   static async registration(
