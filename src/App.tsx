@@ -13,7 +13,6 @@ import ProfilePage from "./pages/profile/ui/ProfilePage";
 import BookPage from "./pages/book/ui/BookPage";
 import FavoritesPage from "./pages/favorites/ui/FavoritesPage";
 import Footer from "./widgets/footer/Footer";
-import { AuthProvider } from "./app/providers/AuthProvider";
 import "./App.css";
 
 const queryClient = new QueryClient();
@@ -46,14 +45,13 @@ const App: FC = () => {
   const { store } = useContext(Context);
 
   useEffect(() => {
-    const checkAuth = async () => {
-      if (localStorage.getItem("refreshToken")) {
-        await store.checkAuth();
-      }
-    };
-    checkAuth();
-  }, [store]);
 
+    if (localStorage.getItem("refreshToken")) {
+      store.checkAuth();
+    } else {
+      store.setLoading(false);
+    }
+  }, []); 
   const handleLogin = async (data: ILoginData) => {
     await store.login(data.email, data.password);
   };
@@ -81,84 +79,82 @@ const App: FC = () => {
   }
 
   return (
-    <AuthProvider>
-      <QueryClientProvider client={queryClient}>
-        <BrowserRouter>
-          <Routes>
-            <Route
-              path={patches.login.route}
-              element={
-                <PublicRoute>
-                  <div className="app">
-                    <div className="auth-container">
-                      <div className="auth-card">
-                        <LoginForm onSubmit={handleLogin} />
-                      </div>
+    <QueryClientProvider client={queryClient}>
+      <BrowserRouter>
+        <Routes>
+          <Route
+            path={patches.login.route}
+            element={
+              <PublicRoute>
+                <div className="app">
+                  <div className="auth-container">
+                    <div className="auth-card">
+                      <LoginForm onSubmit={handleLogin} />
                     </div>
                   </div>
-                </PublicRoute>
-              }
-            />
-            <Route
-              path={patches.signup.route}
-              element={
-                <PublicRoute>
-                  <div className="app">
-                    <div className="auth-container">
-                      <div className="auth-card">
-                        <RegisterForm onSubmit={handleSignup} />
-                      </div>
+                </div>
+              </PublicRoute>
+            }
+          />
+          <Route
+            path={patches.signup.route}
+            element={
+              <PublicRoute>
+                <div className="app">
+                  <div className="auth-container">
+                    <div className="auth-card">
+                      <RegisterForm onSubmit={handleSignup} />
                     </div>
                   </div>
-                </PublicRoute>
-              }
-            />
-            <Route
-              path={patches.home.route}
-              element={
+                </div>
+              </PublicRoute>
+            }
+          />
+          <Route
+            path={patches.home.route}
+            element={
+              <MainLayout>
+                <HomePage />
+              </MainLayout>
+            }
+          />
+          <Route
+            path={patches.profile.route}
+            element={
+              <ProtectedRoute>
                 <MainLayout>
-                  <HomePage />
+                  <ProfilePage />
                 </MainLayout>
-              }
-            />
-            <Route
-              path={patches.profile.route}
-              element={
-                <ProtectedRoute>
-                  <MainLayout>
-                    <ProfilePage />
-                  </MainLayout>
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path={patches.book.route}
-              element={
-                <ProtectedRoute>
-                  <MainLayout>
-                    <BookPage />
-                  </MainLayout>
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path={patches.favorites.route}
-              element={
-                <ProtectedRoute>
-                  <MainLayout>
-                    <FavoritesPage />
-                  </MainLayout>
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="*"
-              element={<Navigate to={patches.home.route} replace />}
-            />
-          </Routes>
-        </BrowserRouter>
-      </QueryClientProvider>
-    </AuthProvider>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path={patches.book.route}
+            element={
+              <ProtectedRoute>
+                <MainLayout>
+                  <BookPage />
+                </MainLayout>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path={patches.favorites.route}
+            element={
+              <ProtectedRoute>
+                <MainLayout>
+                  <FavoritesPage />
+                </MainLayout>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="*"
+            element={<Navigate to={patches.home.route} replace />}
+          />
+        </Routes>
+      </BrowserRouter>
+    </QueryClientProvider>
   );
 };
 
