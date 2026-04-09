@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { patches } from "../../../app/patches";
-import { handleCartUnauthorized } from "../../../shared/lib/cartAuthError";
 import Banner from "../../../widgets/banner/Banner";
 import Button from "../../../widgets/button/Button";
 import BookCard from "../../../widgets/bookCard/BookCard";
-import { useAddToCartMutation, useGetBooks } from "../../../entities";
+import { useGetBooks } from "../../../entities";
 import Features from "../../../widgets/features/Features";
 import recommendationsIcon from "../../../assets/icons/books.svg";
 import arrowRightIcon from "../../../assets/icons/Arrow.svg";
@@ -16,9 +14,9 @@ const genres = ["Детективы", "Романы", "Фантастика", "�
 const HomePage: React.FC = () => {
   const navigate = useNavigate();
   const getBooks = useGetBooks();
-  const addToCart = useAddToCartMutation();
   const [books, setBooks] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<unknown>(null);
 
   useEffect(() => {
     const fetchBooks = async () => {
@@ -27,7 +25,7 @@ const HomePage: React.FC = () => {
         const data = await getBooks();
         setBooks(data);
       } catch (err) {
-        console.error(err);
+        setError(err);
       } finally {
         setLoading(false);
       }
@@ -44,16 +42,7 @@ const HomePage: React.FC = () => {
   };
 
   const handleAddToCart = (bookId: string) => {
-    addToCart.mutate(
-      { book_id: bookId, amount: 1 },
-      {
-        onError: (err) => {
-          if (!handleCartUnauthorized(err, navigate, patches.login.route)) {
-            console.error(err);
-          }
-        },
-      },
-    );
+    console.log("Добавлено в корзину:", bookId);
   };
 
   return (

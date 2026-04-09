@@ -5,7 +5,6 @@ import HomePage from "../pages/glavnay/ui/HomePage";
 import ProfilePage from "../pages/profile/ui/ProfilePage";
 import BookPage from "../pages/book/ui/BookPage";
 import FavoritesPage from "../pages/favorites/ui/FavoritesPage";
-import CatalogPage from "../pages/catalog/ui/CatalogPage";
 
 export default () => {
   return renderRoutes([
@@ -28,11 +27,6 @@ export default () => {
       exact: true,
       path: patches.favorites.route,
       component: FavoritesPage,
-    },
-    {
-      exact: true,
-      path: patches.catalog.route,
-      component: CatalogPage,
     },
   ]);
 };
