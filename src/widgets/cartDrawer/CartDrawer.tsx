@@ -14,7 +14,7 @@ import cartIcon from "../../assets/icons/cart.svg";
 import placeholderImage from "../../assets/images/address-book.png";
 import arrowRightIcon from "../../assets/icons/Arrow.svg";
 import "./CartDrawer.css";
-
+console.log("CartDrawer file evaluated");
 function formatRub(n: number) {
   const rounded = Math.round(n * 10) / 10;
   return Number.isInteger(rounded) ? String(rounded) : String(rounded);
@@ -39,7 +39,14 @@ const CartDrawer: React.FC<CartDrawerProps> = ({ isOpen, onClose }) => {
   const { data: books = [], isLoading, isError, refetch } = useCartBooks();
   const updateItem = useUpdateCartItemMutation();
   const removeItem = useRemoveCartItemMutation();
-
+  console.log(books, "hghghg");
+  const cartQuery = useCartBooks();
+  console.log("cartQuery state:", {
+    data: cartQuery.data,
+    isLoading: cartQuery.isLoading,
+    isError: cartQuery.isError,
+    error: cartQuery.error,
+  });
   const onCartMutationError = useCallback(
     (err: unknown) => {
       if (handleCartUnauthorized(err, navigate, patches.login.route)) return;
@@ -47,10 +54,6 @@ const CartDrawer: React.FC<CartDrawerProps> = ({ isOpen, onClose }) => {
     },
     [navigate],
   );
-
-  useEffect(() => {
-    if (isOpen) void refetch();
-  }, [isOpen, refetch]);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -71,7 +74,7 @@ const CartDrawer: React.FC<CartDrawerProps> = ({ isOpen, onClose }) => {
 
   if (!isOpen) return null;
 
-  const lineCount = books.length;
+  const lineCount = books?.length;
   const { pieces, sumAfter, sumBefore, discountSum } = cartTotals(books);
 
   const handleQty = (book: IBook, next: number) => {
@@ -86,17 +89,19 @@ const CartDrawer: React.FC<CartDrawerProps> = ({ isOpen, onClose }) => {
   };
 
   const node = (
-    <div className="CartDrawer__root" role="dialog" aria-modal="true" aria-label="Корзина">
+    <div
+      className="CartDrawer__root"
+      role="dialog"
+      aria-modal="true"
+      aria-label="Корзина"
+    >
       <button
         type="button"
         className="CartDrawer__overlay"
         onClick={onClose}
         aria-label="Закрыть корзину"
       />
-      <aside
-        className="CartDrawer__panel"
-        onClick={(e) => e.stopPropagation()}
-      >
+      <aside className="CartDrawer__panel" onClick={(e) => e.stopPropagation()}>
         <header className="CartDrawer__header">
           <div className="CartDrawer__header-title">
             <img src={cartIcon} alt="" className="CartDrawer__header-icon" />
@@ -105,9 +110,7 @@ const CartDrawer: React.FC<CartDrawerProps> = ({ isOpen, onClose }) => {
         </header>
 
         <div className="CartDrawer__list-wrap">
-          {isLoading && (
-            <div className="CartDrawer__hint">Загрузка...</div>
-          )}
+          {isLoading && <div className="CartDrawer__hint">Загрузка...</div>}
           {isError && !isLoading && (
             <div className="CartDrawer__hint CartDrawer__hint--error">
               Не удалось загрузить корзину.
@@ -148,7 +151,9 @@ const CartDrawer: React.FC<CartDrawerProps> = ({ isOpen, onClose }) => {
 
           <div className="CartDrawer__total-row">
             <span>Итого</span>
-            <span className="CartDrawer__total-sum">{formatRub(sumAfter)} р</span>
+            <span className="CartDrawer__total-sum">
+              {formatRub(sumAfter)} р
+            </span>
           </div>
 
           <div className="CartDrawer__bonus-card">
@@ -156,14 +161,22 @@ const CartDrawer: React.FC<CartDrawerProps> = ({ isOpen, onClose }) => {
               <span className="CartDrawer__coin-stack" />
             </div>
             <div className="CartDrawer__bonus-text">
-              <span className="CartDrawer__bonus-line">950 бонусов доступно</span>
+              <span className="CartDrawer__bonus-line">
+                950 бонусов доступно
+              </span>
             </div>
-            <span className="CartDrawer__bonus-badge">+ 91 бонус за покупку</span>
+            <span className="CartDrawer__bonus-badge">
+              + 91 бонус за покупку
+            </span>
           </div>
 
           <button type="button" className="CartDrawer__checkout">
             <span>Оформить заказ</span>
-            <img src={arrowRightIcon} alt="" className="CartDrawer__checkout-arrow" />
+            <img
+              src={arrowRightIcon}
+              alt=""
+              className="CartDrawer__checkout-arrow"
+            />
           </button>
         </div>
       </aside>
@@ -204,10 +217,14 @@ function CartLine({
           <div className="CartDrawer__item-title">{book.title}</div>
           <div className="CartDrawer__item-author">{book.author}</div>
           <div className="CartDrawer__item-prices">
-            <span className="CartDrawer__price-now">{formatRub(unitAfter)} р</span>
+            <span className="CartDrawer__price-now">
+              {formatRub(unitAfter)} р
+            </span>
             {hasDiscount && (
               <>
-                <span className="CartDrawer__price-was">{formatRub(unitBefore)} р</span>
+                <span className="CartDrawer__price-was">
+                  {formatRub(unitBefore)} р
+                </span>
                 <span className="CartDrawer__discount-badge">
                   −{Math.round(book.discount)}%
                 </span>
@@ -236,7 +253,9 @@ function CartLine({
                 +
               </button>
             </div>
-            <span className="CartDrawer__line-total">{formatRub(lineTotal)} р</span>
+            <span className="CartDrawer__line-total">
+              {formatRub(lineTotal)} р
+            </span>
           </div>
         </div>
       </div>

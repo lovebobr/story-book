@@ -8,6 +8,7 @@ import "./BookPage.css";
 import BookCard from "../../../widgets/bookCard/BookCard";
 import { InteractiveRating } from "../../../widgets/features/rateBook/ui/InteractiveRating/InteractiveRating";
 import { useAuth } from "../../../entities/user/hook/useAuth";
+import { FavouriteButton } from "../../../features/toggleFavourite/ui/FavouriteButton/FavouriteButton";
 
 const BookPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -126,6 +127,7 @@ const BookPage: React.FC = () => {
                 >
                   В корзину
                 </Button>
+                <FavouriteButton bookId={book.id} />
               </div>
             </div>
           </div>

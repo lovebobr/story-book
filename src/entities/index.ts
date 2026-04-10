@@ -7,3 +7,6 @@ export {
   useRemoveCartItemMutation,
   cartTotals,
 } from "./cart/lib/useCartMutations";
+export { useAddToFavourites } from "./favorites/lib/useAddToFavourites";
+export { useFavourites } from "./favorites/lib/useFavourites";
+export { useRemoveFromFavourites } from "./favorites/lib/useRemoveFromFavourites";

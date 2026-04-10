@@ -5,7 +5,7 @@ const CART_URL = "/carts";
 
 export const cartApi = {
   getCart: (params?: { limit?: number; offset?: number }) => {
-    return $api.get<{ books: IBook[] }>(CART_URL, {
+    return $api.get<IBook[]>(CART_URL, {
       params: {
         limit: params?.limit ?? 10,
         offset: params?.offset ?? 0,

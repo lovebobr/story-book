@@ -6,6 +6,7 @@ import React, {
   useState,
 } from "react";
 import CartDrawer from "../../widgets/cartDrawer/CartDrawer";
+import { useAuth } from "../../entities/user/hook/useAuth";
 
 interface CartUiContextValue {
   isOpen: boolean;
@@ -27,11 +28,12 @@ export function CartUiProvider({ children }: { children: React.ReactNode }) {
     () => ({ isOpen, openCart, closeCart, toggleCart }),
     [isOpen, openCart, closeCart, toggleCart],
   );
-
+  const { isAuthenticated } = useAuth();
+  console.log(isAuthenticated);
   return (
     <CartUiContext.Provider value={value}>
       {children}
-      <CartDrawer isOpen={isOpen} onClose={closeCart} />
+      {isAuthenticated && <CartDrawer isOpen={isOpen} onClose={closeCart} />}
     </CartUiContext.Provider>
   );
 }

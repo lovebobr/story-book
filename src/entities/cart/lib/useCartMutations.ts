@@ -1,16 +1,19 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { cartApi } from "../api";
 import type { IBook } from "../../book/model/types";
+import { useAuth } from "../../user/hook/useAuth";
 
 export const CART_QUERY_KEY = ["cart"] as const;
 
 export function useCartBooks() {
+  const { user } = useAuth();
   return useQuery({
     queryKey: CART_QUERY_KEY,
     queryFn: async () => {
       const { data } = await cartApi.getCart({ limit: 100, offset: 0 });
-      return data.books;
+      return data;
     },
+    enabled: !!user,
   });
 }
 
@@ -44,13 +47,8 @@ export function useAddToCartMutation() {
 export function useUpdateCartItemMutation() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: ({
-      bookId,
-      amount,
-    }: {
-      bookId: string;
-      amount: number;
-    }) => cartApi.updateCartItem(bookId, { book_id: bookId, amount }),
+    mutationFn: ({ bookId, amount }: { bookId: string; amount: number }) =>
+      cartApi.updateCartItem(bookId, { book_id: bookId, amount }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: CART_QUERY_KEY });
     },
